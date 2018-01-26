@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.9/css/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.9/js/bootstrap-dialog.min.js"></script>
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <title>CONSULTA DE MATRÍCULA ESCOLAR</title>
+        <meta charset="utf-8" />
+    </head>
+    <body>
+        <script type="text/javascript">
+            /**
+             * This example demonstrates how to custom the spinning icon.
+             */
+            $(function () {
+                BootstrapDialog.show({
+                  type: BootstrapDialog.TYPE_DANGER,
+            title: 'EEM WLADIMIR RORIZ\nSISTEMA DE CONSULTA DE MATRÍCULA ESCOLAR',
+            message: 'NOME COMPLETO:<br/><input type="text" class="form-control"><small><i class="glyphicon glyphicon-remove"></i>Sem acentos e espaçamento após o nome.<small> ',
+            onhide: function(dialogRef){
+                var nome = dialogRef.getModalBody().find('input').val();
+                if(nome.length >=8 && nome.length <=40) {
+                  var ajax = new XMLHttpRequest();
+                  ajax.open("GET", "http://sige.seduc.ce.gov.br/Consulta/Aluno/PesquisaAluno.asp?nm_aluno="+nome+"&cd_unidade_trabalho=278&fl_tipo_pesquisa=I", true);
+                  // Envia a requisição
+                  ajax.send();
+                  // Cria um evento para receber o retorno.
+                  ajax.onreadystatechange = function() {
+                    // Caso o state seja 4 e o http.status for 200, é porque a requisiçõe deu certo.
+                  	if (ajax.readyState == 4 && ajax.status == 200) {
+                  		var data = ajax.responseText;
+                  		var datas = "";
+                      // Retorno do Ajax
+                      var matricula = datas.concat(data[49], data[50], data[51], data[52], data[53], data[54], data[55]);
+                      alert("MATRÍCULA:"+matricula+"\nSENHA: 123456");
+                  	}
+                  }
+                    return false;
+                } else {alert("ERRO! Preencha os dados corretamente."); window.location.reload();} 
+            },
+            buttons: [{
+                cssClass: 'btn-primary glyphicon glyphicon-ok',
+                label: ' Enviar',
+                action: function(dialogRef) {
+                    dialogRef.close();
+                }
+            }]
+        });
+            });
+        </script>
+    </body>
+</html>
